@@ -2,8 +2,7 @@
 
 (defn suitable-permissions []
   (doto (java.security.Permissions.)
-    (.add (RuntimePermission. "accessDeclaredMembers"))
-    (.add (RuntimePermission. "createClassLoader"))))
+    (.add (RuntimePermission. "accessDeclaredMembers"))))
 
 (defn protection-domain [permissions]
   (java.security.ProtectionDomain.
