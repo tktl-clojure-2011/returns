@@ -34,3 +34,20 @@
     (if (= head 'ns)
       (cons (list* (assoc m 1 (gensym user))) (rest code))
       code)))
+
+(def *bad-forms* #{'alter-var-root 'alterRoot 'intern 'eval 'catch 'load-string 'load-reader 'clojure.core/addMethod})
+
+(defn de-fang
+  "looks through the macroexpand of a form for things I don't allow"
+  [form notallowed]
+  (if (coll? form)
+    (when (not
+           (some notallowed
+                 (tree-seq coll?
+                           #(let [a (macroexpand %)]
+                              (if (coll? a)
+                                (seq a)
+                                (list a)))
+                           form)))
+      form)
+    form))
